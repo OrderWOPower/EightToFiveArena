@@ -7,7 +7,7 @@ namespace EightToFiveArena
 {
     public class EightToFiveArenaModel : SettlementAccessModel
     {
-        private SettlementAccessModel _model;
+        private readonly SettlementAccessModel _model;
 
         public EightToFiveArenaModel(SettlementAccessModel model) => _model = model;
 
