@@ -1,6 +1,7 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace EightToFiveArena
@@ -15,21 +16,20 @@ namespace EightToFiveArena
         {
             get
             {
-                int num = CampaignTime.Now.GetHourOfDay;
+                int num = MathF.Floor(CampaignTime.Now.CurrentHourInDay);
+
                 return num >= 8 && num < 17;
             }
         }
 
         public override bool CanMainHeroAccessLocation(Settlement settlement, string locationId, out bool disableOption, out TextObject disabledText)
         {
-            disabledText = TextObject.Empty;
-            disableOption = false;
-            bool result = true;
             if (locationId == "arena")
             {
-                result = CanMainHeroGoToArena(out disableOption, out disabledText);
+                return CanMainHeroGoToArena(out disableOption, out disabledText);
             }
-            return result;
+
+            return _model.CanMainHeroAccessLocation(settlement, locationId, out disableOption, out disabledText);
         }
 
         public override bool CanMainHeroDoSettlementAction(Settlement settlement, SettlementAction settlementAction, out bool disableOption, out TextObject disabledText) => _model.CanMainHeroDoSettlementAction(settlement, settlementAction, out disableOption, out disabledText);
@@ -42,17 +42,21 @@ namespace EightToFiveArena
 
         public override bool IsRequestMeetingOptionAvailable(Settlement settlement, out bool disableOption, out TextObject disabledText) => _model.IsRequestMeetingOptionAvailable(settlement, out disableOption, out disabledText);
 
-        // If the arena is closed, disable the option for entering the arena and replace the tooltip text.
         private bool CanMainHeroGoToArena(out bool disableOption, out TextObject disabledText)
         {
             if (IsArenaOpen)
             {
                 disabledText = TextObject.Empty;
                 disableOption = false;
+
                 return true;
             }
+
+            // Replace the tooltip text.
             disabledText = new TextObject("Arena is closed before 0800 and after 1700.", null);
+            // Disable the option for entering the arena
             disableOption = true;
+
             return false;
         }
     }
