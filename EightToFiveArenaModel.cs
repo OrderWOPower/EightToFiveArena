@@ -22,15 +22,7 @@ namespace EightToFiveArena
             }
         }
 
-        public override bool CanMainHeroAccessLocation(Settlement settlement, string locationId, out bool disableOption, out TextObject disabledText)
-        {
-            if (locationId == "arena")
-            {
-                return CanMainHeroGoToArena(out disableOption, out disabledText);
-            }
-
-            return _model.CanMainHeroAccessLocation(settlement, locationId, out disableOption, out disabledText);
-        }
+        public override bool CanMainHeroAccessLocation(Settlement settlement, string locationId, out bool disableOption, out TextObject disabledText) => locationId == "arena" ? CanMainHeroGoToArena(out disableOption, out disabledText) : _model.CanMainHeroAccessLocation(settlement, locationId, out disableOption, out disabledText);
 
         public override bool CanMainHeroDoSettlementAction(Settlement settlement, SettlementAction settlementAction, out bool disableOption, out TextObject disabledText) => _model.CanMainHeroDoSettlementAction(settlement, settlementAction, out disableOption, out disabledText);
 
