@@ -12,17 +12,30 @@ namespace EightToFiveArena
 
         public EightToFiveArenaModel(SettlementAccessModel model) => _model = model;
 
-        public bool IsArenaOpen
+        public override bool CanMainHeroAccessLocation(Settlement settlement, string locationId, out bool disableOption, out TextObject disabledText)
         {
-            get
+            if (locationId == "arena")
             {
                 int num = MathF.Floor(CampaignTime.Now.CurrentHourInDay);
 
-                return num >= 8 && num < 17;
-            }
-        }
+                if (num >= 8 && num < 17)
+                {
+                    disabledText = TextObject.Empty;
+                    disableOption = false;
 
-        public override bool CanMainHeroAccessLocation(Settlement settlement, string locationId, out bool disableOption, out TextObject disabledText) => locationId == "arena" ? CanMainHeroGoToArena(out disableOption, out disabledText) : _model.CanMainHeroAccessLocation(settlement, locationId, out disableOption, out disabledText);
+                    return true;
+                }
+
+                // Replace the tooltip text.
+                disabledText = new TextObject("Arena is closed before 0800 and after 1700.", null);
+                // Disable the option for entering the arena.
+                disableOption = true;
+
+                return false;
+            }
+
+            return _model.CanMainHeroAccessLocation(settlement, locationId, out disableOption, out disabledText);
+        }
 
         public override bool CanMainHeroDoSettlementAction(Settlement settlement, SettlementAction settlementAction, out bool disableOption, out TextObject disabledText) => _model.CanMainHeroDoSettlementAction(settlement, settlementAction, out disableOption, out disabledText);
 
@@ -33,23 +46,5 @@ namespace EightToFiveArena
         public override void CanMainHeroEnterSettlement(Settlement settlement, out AccessDetails accessDetails) => _model.CanMainHeroEnterSettlement(settlement, out accessDetails);
 
         public override bool IsRequestMeetingOptionAvailable(Settlement settlement, out bool disableOption, out TextObject disabledText) => _model.IsRequestMeetingOptionAvailable(settlement, out disableOption, out disabledText);
-
-        private bool CanMainHeroGoToArena(out bool disableOption, out TextObject disabledText)
-        {
-            if (IsArenaOpen)
-            {
-                disabledText = TextObject.Empty;
-                disableOption = false;
-
-                return true;
-            }
-
-            // Replace the tooltip text.
-            disabledText = new TextObject("Arena is closed before 0800 and after 1700.", null);
-            // Disable the option for entering the arena
-            disableOption = true;
-
-            return false;
-        }
     }
 }
