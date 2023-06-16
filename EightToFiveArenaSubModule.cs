@@ -13,9 +13,7 @@ namespace EightToFiveArena
         {
             if (game.GameType is Campaign)
             {
-                CampaignGameStarter campaignGameStarter = (CampaignGameStarter)gameStarterObject;
-
-                campaignGameStarter.AddModel(new EightToFiveArenaModel((SettlementAccessModel)campaignGameStarter.Models.Last(model => model is SettlementAccessModel)));
+                gameStarterObject.AddModel(new EightToFiveArenaModel((SettlementAccessModel)gameStarterObject.Models.Last(model => model is SettlementAccessModel)));
             }
         }
     }
