@@ -18,20 +18,15 @@ namespace EightToFiveArena
             {
                 int num = MathF.Floor(CampaignTime.Now.CurrentHourInDay);
 
-                if (num >= 8 && num < 17)
+                if (num < 8 || num >= 17)
                 {
-                    disabledText = TextObject.Empty;
-                    disableOption = false;
+                    // Replace the tooltip text.
+                    disabledText = new TextObject("Arena is closed before 0800 and after 1700.", null);
+                    // Disable the option for entering the arena.
+                    disableOption = true;
 
-                    return true;
+                    return false;
                 }
-
-                // Replace the tooltip text.
-                disabledText = new TextObject("Arena is closed before 0800 and after 1700.", null);
-                // Disable the option for entering the arena.
-                disableOption = true;
-
-                return false;
             }
 
             return _model.CanMainHeroAccessLocation(settlement, locationId, out disableOption, out disabledText);
