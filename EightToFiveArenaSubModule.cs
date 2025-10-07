@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
@@ -13,7 +12,7 @@ namespace EightToFiveArena
         {
             if (game.GameType is Campaign)
             {
-                gameStarterObject.AddModel(new EightToFiveArenaModel((SettlementAccessModel)gameStarterObject.Models.Last(model => model is SettlementAccessModel)));
+                gameStarterObject.AddModel(new EightToFiveArenaModel(((CampaignGameStarter)gameStarterObject).GetModel<SettlementAccessModel>()));
             }
         }
     }
